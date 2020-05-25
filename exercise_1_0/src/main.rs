@@ -1,4 +1,7 @@
-#[derive(Debug, PartialEq)]
+use std::cmp;
+use std::cmp::Ordering;
+
+#[derive(Debug, Eq, PartialEq)]
 pub struct Time {
     ms: u64,
 }
@@ -9,26 +12,44 @@ impl Time {
     }
 }
 
+impl Ord for Time {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.ms.cmp(&other.ms)
+    }
+}
+
+impl PartialOrd for Time {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 fn in_hours(t: Time) -> u64 {
-    unimplemented!();
+    const MS_PER_HOUR: u64 = 1000 * 60 * 60;
+    t.ms / MS_PER_HOUR
 }
 
 fn greater(t1: Time, t2: Time) -> Time {
-    unimplemented!();
+    cmp::max(t1, t2)
 }
 
 // implement without cloning
 fn greatest(v: Vec<Time>) -> Time {
-    unimplemented!();
+    let max_time = v.iter().max().unwrap();
+    Time::new(max_time.ms)
 }
 
 // references
 fn time_diff_in_ms(t1: &Time, t2: &Time) -> u64 {
-    unimplemented!();
+    match t1.cmp(t2) {
+        Ordering::Greater => t1.ms - t2.ms,
+        Ordering::Equal => 0,
+        Ordering::Less => t2.ms - t1.ms,
+    }
 }
 
 fn greatest_ref(v: &Vec<Time>) -> &Time {
-    unimplemented!();
+    v.iter().max().unwrap()
 }
 
 fn main() {}
