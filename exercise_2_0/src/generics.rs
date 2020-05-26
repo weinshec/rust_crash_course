@@ -1,22 +1,21 @@
 // This shopping list program isn't compiling!
 // Use your knowledge of generics to fix it.
 
-// I AM NOT DONE
+use std::fmt::Display;
 
 fn example() {
-    let mut shopping_list: Vec<?> = Vec::new();
+    let mut shopping_list: Vec<&str> = Vec::new();
     shopping_list.push("milk");
 }
- // This powerful wrapper provides the ability to store a positive integer value.
+// This powerful wrapper provides the ability to store a positive integer value.
 // Rewrite it using generics so that it supports wrapping ANY type.
 
-// I AM NOT DONE
-struct Wrapper {
-    value: u32
+struct Wrapper<T> {
+    value: T
 }
 
-impl Wrapper {
-    pub fn new(value: u32) -> Self {
+impl<T> Wrapper<T> {
+    pub fn new(value: T) -> Self {
         Wrapper { value }
     }
 }
@@ -29,14 +28,13 @@ impl Wrapper {
 // Make the necessary code changes to support alphabetical report cards, thereby making the second
 // test pass.
 
-// I AM NOT DONE
-pub struct ReportCard {
-    pub grade: f32,
+pub struct ReportCard<T> {
+    pub grade: T,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
+impl<T: Display> ReportCard<T> {
     pub fn print(&self) -> String {
         format!("{} ({}) - achieved a grade of {}", &self.student_name, &self.student_age, &self.grade)
     }
@@ -46,7 +44,7 @@ impl ReportCard {
 mod tests {
     use super::*;
 
-        #[test]
+    #[test]
     fn store_u32_in_wrapper() {
         assert_eq!(Wrapper::new(42).value,  42);
     }
@@ -67,10 +65,21 @@ mod tests {
     }
 
     #[test]
-    fn generate_alphabetic_report_card() {
+    fn generate_alphabetic_report_card_numbers() {
         // TODO: Make sure to change the grade here after you finish the exercise.
         let report_card = ReportCard {
             grade: 2.1,
+            student_name: "Gary Plotter".to_string(),
+            student_age: 11,
+        };
+        assert_eq!(report_card.print(), "Gary Plotter (11) - achieved a grade of 2.1");
+    }
+
+    #[test]
+    fn generate_alphabetic_report_card_alphabet() {
+        // TODO: Make sure to change the grade here after you finish the exercise.
+        let report_card = ReportCard {
+            grade: "A+",
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };
